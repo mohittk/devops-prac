@@ -42,10 +42,6 @@ app.get('/', (req, res) =>
   )
 )
 
-
-
-// console.log(process.env)
-
 app.listen(PORT, () =>
   console.log(`server running on: http://${ip.address()}:${PORT}`)
 )
