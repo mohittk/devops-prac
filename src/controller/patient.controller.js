@@ -45,18 +45,58 @@ export const createPatients = (req, res) => {
 
 export const getPatient = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, fetching Patient`);
-    database.query(QUERY.SELECT_PATIENT, [re.params.id], (error, results) => {
+    database.query(QUERY.SELECT_PATIENT, [req.params.id], (error, results) => {
         if(!results[0]) {
              res.status(HttpStatus.NOT_FOUND.code)
-            .send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, `Error occured`));
+            .send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, `Patient by id ${req.params.id} was not found`));
 
         }
         else{
-            const patient = { id: results.insertedId, ...req.body, created_at: new Date()};
-            res.status(HttpStatus.CREATED.code)
-            .send(new Response (HttpStatus.CREATED.code, HttpStatus.CREATED.status, `Patient created`, {patient} ))
+            res.status(HttpStatus.OK.code)
+            .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `Patient retrieved`, results[0] ))
 
         }
+    })
+}
+
+export const updatePatient = (req, res) =>{
+    logger.info(`${req.method} ${req.originalUrl}, fetching patient`);
+    database.query(QUERY.SELECT_PATIENT, [req.params.id], (error, results)=>{
+        if(!results[0]){
+            res.status(HttpStatus.NOT_FOUND.code)
+            .send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, `Patient by id ${req.params.id}`))
+        }
+        else{
+            logger.info(`${req.method} ${req.originalUrl}, updating patient`);
+            database.query(QUERY.UPDATE_PATIENT, [...Object.values(req.body), req.params.id], (error, results)=>{
+                if(!error){
+                    res.status(HttpStatus.OK.code)
+                    .send(new Response(HttpStatus.OK.code, HttpStatus.status, `Patient Updated`, {id : re.params.id, ...req.body}))
+                } else {
+                    logger.error(error.message);
+                    res.status(HttpStatus.NOT_FOUND.code)
+                    .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `Error Occured`))
+                }
+            });
+        }
+
+    });
+
+}
+
+export const deletePatient = (req, res) => {
+    logger.info(`${req.method} ${req.originalUrl}, deleting patient`);
+    database.query(QUERY.DELETE_PATIENT, [req.params.id] ,(error, results)=>{
+        if(results.affectedRows > 0){
+            res.status(HttpStatus.OK.code)
+            .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `Patient deleted`, results[0]));
+
+        }
+        else{
+            res.status(HttpStatus.NOT_FOUND.code)
+        .send(new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status,`Patient by id ${req.params.id} was not found` ));        }
+
+        
     })
 }
 
