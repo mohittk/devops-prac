@@ -16,7 +16,7 @@ const HttpStatus = {
 export const getPatients = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, fetching patients`);
     database.query(QUERY.SELECT_PATIENTS, (error, results) => {
-        if(!results) {
+        if(!results){
             res.status(HttpStatus.OK.code).send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `No patients Found`));
         }
         else{
@@ -25,7 +25,7 @@ export const getPatients = (req, res) => {
     })
 }
 
-export const createPatients = (req, res) => {
+export const createPatient = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, creating Patient`);
     database.query(QUERY.CREATE_PATIENT, Object.values(req.body), (error, results) => {
         if(!results) {
