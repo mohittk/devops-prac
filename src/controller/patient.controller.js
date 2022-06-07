@@ -87,6 +87,7 @@ export const updatePatient = (req, res) =>{
 
 }
 
+
 export const deletePatient = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, deleting patient`);
     database.query(QUERY.DELETE_PATIENT, [req.params.id] ,(error, results)=>{
