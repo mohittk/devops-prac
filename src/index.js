@@ -15,7 +15,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(cors({ origin: '*' })) // not recommended
+app.use(cors({ origin: '*' })) 
 
 // console.log(HttpStatus.OK.code)
 
@@ -30,6 +30,7 @@ app.get('/', (req, res) =>
     )
   )
 )
+
 
 app.all('*', (req, res) => {
   res.status(HttpStatus.NOT_FOUND.code)

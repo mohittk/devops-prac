@@ -25,6 +25,7 @@ export const getPatients = (req, res) => {
     })
 }
 
+
 export const createPatient = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, creating Patient`);
     database.query(QUERY.CREATE_PATIENT, Object.values(req.body), (error, results) => {
@@ -42,6 +43,8 @@ export const createPatient = (req, res) => {
         }
     })
 }
+
+
 
 export const getPatient = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, fetching Patient`);
